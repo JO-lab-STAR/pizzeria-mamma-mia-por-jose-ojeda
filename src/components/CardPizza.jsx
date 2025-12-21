@@ -1,31 +1,42 @@
-import { formatPrice } from "../utils/formatPrice";
-
 const CardPizza = ({ name, price, ingredients, img }) => {
-    return (
-        <div className="card shadow-sm" style={{ width: "18rem" }}>
-            <img src={img} className="card-img-top" alt={name} />
+  return (
+    <div style={styles.card}>
+      <img src={img} alt={name} style={styles.img} />
 
-            <div className="card-body">
-                <h5 className="card-title text-center">{name}</h5>
+      <h3>{name}</h3>
 
-                <hr />
+      <ul>
+        {ingredients.map((ingredient, index) => (
+          <li key={index}>🍕 {ingredient}</li>
+        ))}
+      </ul>
 
-                <h6>Ingredientes:</h6>
-                <ul>
-                    {ingredients.map((ing, index) => (
-                        <li key={index}>{ing}</li>
-                    ))}
-                </ul>
+      <h4>$ {price.toLocaleString("es-CL")}</h4>
 
-                <h4 className="text-center fw-bold">${formatPrice(price)}</h4>
+      <div style={styles.buttons}>
+        <button>Ver más</button>
+        <button>Añadir</button>
+      </div>
+    </div>
+  );
+};
 
-                <div className="d-flex justify-content-between mt-3">
-                    <button className="btn btn-outline-primary">Ver más 👀</button>
-                    <button className="btn btn-primary">Añadir 🛒</button>
-                </div>
-            </div>
-        </div>
-    );
+const styles = {
+  card: {
+    border: "1px solid #ddd",
+    borderRadius: "10px",
+    padding: "15px",
+    textAlign: "center",
+  },
+  img: {
+    width: "100%",
+    borderRadius: "10px",
+  },
+  buttons: {
+    display: "flex",
+    justifyContent: "space-between",
+    marginTop: "10px",
+  },
 };
 
 export default CardPizza;
