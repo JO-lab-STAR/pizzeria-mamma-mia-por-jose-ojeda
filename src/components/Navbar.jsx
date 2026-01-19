@@ -1,7 +1,9 @@
+import { useCart } from "../context/useCart";
+
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
-  const total = 25000;
+  const { total } = useCart();
   const token = false;
 
   return (
@@ -17,7 +19,7 @@ const Navbar = () => {
         </Link>
 
         <Link className="btn btn-outline-light" to="/cart">
-          🛒 Total: ${total.toLocaleString()}
+          🛒 Total: ${total.toLocaleString("es-CL")}
         </Link>
 
         {/* Condicional por token */}

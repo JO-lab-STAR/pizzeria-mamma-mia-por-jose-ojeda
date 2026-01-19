@@ -1,4 +1,8 @@
-const CardPizza = ({ name, price, ingredients, img }) => {
+import { useCart } from "../context/useCart";
+const CardPizza = ({ id, name, price, ingredients, img, desc }) => {
+  const { addToCart } = useCart();
+  const pizzaObj = { id, name, price, ingredients, img, desc };
+  
   return (
     <div style={styles.card}>
       <img src={img} alt={name} style={styles.img} />
@@ -15,7 +19,7 @@ const CardPizza = ({ name, price, ingredients, img }) => {
 
       <div style={styles.buttons}>
         <button>Ver más</button>
-        <button>Añadir</button>
+        <button onClick={() => addToCart(pizzaObj)}>Añadir</button>
       </div>
     </div>
   );

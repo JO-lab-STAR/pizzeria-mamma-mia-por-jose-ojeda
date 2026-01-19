@@ -1,39 +1,13 @@
-import { useState } from "react";
-import { pizzaCart } from "../data/pizzas";
+import { useCart } from "../context/useCart";
 
 const Cart = () => {
-  const [cart, setCart] = useState(pizzaCart);
-
-  const increase = (id) => {
-    setCart(
-      cart.map((pizza) =>
-        pizza.id === id
-          ? { ...pizza, count: pizza.count + 1 }
-          : pizza
-      )
-    );
-  };
-
-  const decrease = (id) => {
-    setCart(
-      cart
-        .map((pizza) =>
-          pizza.id === id
-            ? { ...pizza, count: pizza.count - 1 }
-            : pizza
-        )
-        .filter((pizza) => pizza.count > 0)
-    );
-  };
-
-  const total = cart.reduce(
-    (acc, pizza) => acc + pizza.price * pizza.count,
-    0
-  );
+  const { cart, changeCount, removeFromCart, total } = useCart();
 
   return (
     <div className="container mt-4">
       <h2>🛒 Carrito</h2>
+
+      {cart.length === 0 && <p>El carrito está vacío.</p>}
 
       {cart.map((pizza) => (
         <div
@@ -48,7 +22,7 @@ const Cart = () => {
           <div className="d-flex align-items-center gap-2">
             <button
               className="btn btn-danger"
-              onClick={() => decrease(pizza.id)}
+              onClick={() => changeCount(pizza.id, -1)}
             >
               -
             </button>
@@ -57,20 +31,27 @@ const Cart = () => {
 
             <button
               className="btn btn-success"
-              onClick={() => increase(pizza.id)}
+              onClick={() => changeCount(pizza.id, 1)}
             >
               +
             </button>
+            <button
+              className="btn btn-outline-danger"
+              onClick={() => removeFromCart(pizza.id)}
+            >
+              Eliminar
+            </button>
           </div>
 
-          <strong>
-            ${(pizza.price * pizza.count).toLocaleString()}
-          </strong>
+          <div>
+            <strong>${(pizza.price * pizza.count).toLocaleString("es-CL")}</strong>
+          </div>
         </div>
       ))}
 
-      <h3 className="mt-4">Total: ${total.toLocaleString()}</h3>
-      <button className="btn btn-primary mt-2">Pagar</button>
+      <div className="mt-4">
+        <h4>Total: ${total.toLocaleString("es-CL")}</h4>
+      </div>
     </div>
   );
 };
