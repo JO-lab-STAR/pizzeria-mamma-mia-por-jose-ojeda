@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useUser } from "../context/useUser";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -6,6 +7,7 @@ const LoginPage = () => {
 
   const [message, setMessage] = useState("");
   const [msgType, setMsgType] = useState("");
+  const { login } = useUser();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -26,6 +28,7 @@ const LoginPage = () => {
     // Éxito (simulado)
     setMsgType("success");
     setMessage("Login exitoso 🔓");
+    login();
   };
 
   return (

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useUser } from "../context/useUser";
 
 const RegisterPage = () => {
     const [email, setEmail] = useState("");
@@ -7,6 +8,7 @@ const RegisterPage = () => {
 
     const [message, setMessage] = useState("");
     const [msgType, setMsgType] = useState(""); // "success" | "error"
+    const { login } = useUser();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -33,6 +35,7 @@ const RegisterPage = () => {
         // Éxito
         setMsgType("success");
         setMessage("Registro exitoso 🎉");
+        login();
     };
 
     return (

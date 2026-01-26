@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 const Pizza = () => {
   const [pizza, setPizza] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { id } = useParams();
 
   useEffect(() => {
     const fetchPizza = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/pizzas/p001"
+          `http://localhost:5000/api/pizzas/${id}`
         );
         const data = await response.json();
         setPizza(data);
@@ -20,7 +22,7 @@ const Pizza = () => {
     };
 
     fetchPizza();
-  }, []);
+  }, [id]);
 
   if (loading) return <p style={{ textAlign: "center" }}>Cargando pizza...</p>;
   if (!pizza) return <p>Error al cargar la pizza</p>;
@@ -60,16 +62,15 @@ const styles = {
     borderRadius: "12px",
   },
   info: {
-    flex: 1,
+    maxWidth: "500px",
   },
   button: {
-    marginTop: "20px",
-    padding: "10px 30px",
-    fontSize: "18px",
-    background: "#e74c3c",
-    color: "#fff",
+    marginTop: "15px",
+    padding: "10px 18px",
+    backgroundColor: "#d62828",
+    color: "white",
     border: "none",
-    borderRadius: "8px",
+    borderRadius: "6px",
     cursor: "pointer",
   },
 };

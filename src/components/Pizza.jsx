@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 const Pizza = () => {
   const [pizza, setPizza] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { id } = useParams();
 
   useEffect(() => {
     const fetchPizza = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/pizzas/p001"
+          `http://localhost:5000/api/pizzas/${id}`
         );
         const data = await response.json();
         setPizza(data);
@@ -20,7 +22,7 @@ const Pizza = () => {
     };
 
     fetchPizza();
-  }, []);
+  }, [id]);
 
   if (loading) return <p style={{ textAlign: "center" }}>Cargando pizza...</p>;
   if (!pizza) return <p>Error al cargar la pizza</p>;
