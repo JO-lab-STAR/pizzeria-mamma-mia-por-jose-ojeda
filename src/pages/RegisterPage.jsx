@@ -8,34 +8,39 @@ const RegisterPage = () => {
 
     const [message, setMessage] = useState("");
     const [msgType, setMsgType] = useState(""); // "success" | "error"
-    const { login } = useUser();
+    const { register } = useUser();
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleSubmit = async (e) => {
+      e.preventDefault();
 
-        // Validaciones
-        if (!email || !password || !confirmPassword) {
-            setMsgType("error");
-            setMessage("Todos los campos son obligatorios.");
-            return;
-        }
+      // Validaciones
+      if (!email || !password || !confirmPassword) {
+        setMsgType("error");
+        setMessage("Todos los campos son obligatorios.");
+        return;
+      }
 
-        if (password.length < 6) {
-            setMsgType("error");
-            setMessage("La contraseña debe tener al menos 6 caracteres.");
-            return;
-        }
+      if (password.length < 6) {
+        setMsgType("error");
+        setMessage("La contraseña debe tener al menos 6 caracteres.");
+        return;
+      }
 
-        if (password !== confirmPassword) {
-            setMsgType("error");
-            setMessage("Las contraseñas no coinciden.");
-            return;
-        }
+      if (password !== confirmPassword) {
+        setMsgType("error");
+        setMessage("Las contraseñas no coinciden.");
+        return;
+      }
 
-        // Éxito
+      // Registro real
+      const result = await register(email, password);
+      if (result.success) {
         setMsgType("success");
         setMessage("Registro exitoso 🎉");
-        login();
+      } else {
+        setMsgType("error");
+        setMessage(result.error || "Error de registro");
+      }
     };
 
     return (

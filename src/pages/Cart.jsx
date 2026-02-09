@@ -1,9 +1,37 @@
 import { useCart } from "../context/useCart";
 import { useUser } from "../context/useUser";
 
+import { useState } from "react";
+
 const Cart = () => {
   const { cart, changeCount, removeFromCart, total } = useCart();
   const { token } = useUser();
+  const [successMsg, setSuccessMsg] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handlePay = async () => {
+    setLoading(true);
+    setSuccessMsg("");
+    try {
+      const res = await fetch("http://localhost:5000/api/checkouts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ cart })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setSuccessMsg("¡Compra realizada con éxito! 🥳");
+      } else {
+        setSuccessMsg(data.error || "Error al realizar la compra.");
+      }
+    } catch (err) {
+      setSuccessMsg("Error de conexión.");
+    }
+    setLoading(false);
+  };
 
   return (
     <div className="container mt-4">
@@ -55,14 +83,18 @@ const Cart = () => {
         <h4>Total: ${total.toLocaleString("es-CL")}</h4>
         <button
           className="btn btn-primary mt-2"
-          disabled={!token}
+          disabled={!token || loading || cart.length === 0}
+          onClick={handlePay}
         >
-          Pagar
+          {loading ? "Procesando..." : "Pagar"}
         </button>
         {!token && (
           <div className="text-danger mt-2">
             Debes iniciar sesión para pagar.
           </div>
+        )}
+        {successMsg && (
+          <div className="alert alert-success mt-2">{successMsg}</div>
         )}
       </div>
     </div>

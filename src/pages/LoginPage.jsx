@@ -9,7 +9,7 @@ const LoginPage = () => {
   const [msgType, setMsgType] = useState("");
   const { login } = useUser();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validaciones
@@ -25,10 +25,15 @@ const LoginPage = () => {
       return;
     }
 
-    // Éxito (simulado)
-    setMsgType("success");
-    setMessage("Login exitoso 🔓");
-    login();
+    // Autenticación real
+    const result = await login(email, password);
+    if (result.success) {
+      setMsgType("success");
+      setMessage("Login exitoso 🔓");
+    } else {
+      setMsgType("error");
+      setMessage(result.error || "Error de autenticación");
+    }
   };
 
   return (
